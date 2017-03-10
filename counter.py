@@ -19,7 +19,7 @@ def update_counter(file_name, reset=False):
     reset: True if the counter in the file should be rest.
     returns: the new counter value
 
-    >>> update_counter('blah.txt',True)
+    >>> update_counter('blah.txt', True)
     1
     >>> update_counter('blah.txt')
     2
@@ -29,12 +29,34 @@ def update_counter(file_name, reset=False):
     3
     >>> update_counter('blah2.txt')
     2
+    >>> update_counter('blah2.txt')
+    3
+    >>> update_counter('blah2.txt')
+    4
     """
-    pass
+    if not reset and exists(file_name):
+        # print("opening "+file_name)
+        f = open(file_name, 'rb')
+        counter = load(f)
+        # print(counter)
+        counter += 1
+        f.close
+        f = open(file_name, 'wb')
+        dump(counter, f)
+        f.close
+        return counter
+    else:
+        # print("opening "+file_name)
+        f = open(file_name, 'wb')
+        counter = 1
+        dump(counter, f)
+        f.close
+        return counter
+
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         import doctest
-        doctest.testmod()
+        doctest.testmod(verbose=True)
     else:
         print("new value is " + str(update_counter(sys.argv[1])))
